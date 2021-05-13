@@ -5,9 +5,6 @@ import re
 import requests
 
 def search_article(url, phrases):
-    """
-    Yield all of the specified phrases that occur in the HTML body of the URL.
-    """
     response = requests.get(url)
     text = BeautifulSoup(response.text, 'html.parser').find('body').text
     for phrase in phrases:
@@ -15,10 +12,6 @@ def search_article(url, phrases):
             yield phrase
 
 def search_rss(rss_entries, phrases):
-    """
-    Search articles listed in the RSS entries for phases, yielding
-    (url, article_title, phrase) tuples.
-    """
     for entry in rss_entries:
         for hit_phrase in search_article(entry['link'], phrases):
             yield entry['link'], entry['title'], hit_phrase
@@ -32,6 +25,6 @@ def main(rss_url, phrases, output_csv_path, rss_limit=None):
             w.writerow([url, phrase])
 
 if __name__ == '__main__':
-    rss_url = 'http://www.dailymail.co.uk/articles.rss'
+    rss_url = 'https://www.cnbc.com/id/100727362/device/rss/rss.html'
     phrases = ['divorce', 'custody battle', …]
     main(rss_url, phrases, 'output.csv', 100)
